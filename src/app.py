@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
@@ -32,6 +32,16 @@ class TaskSchema(ma.Schema):
 
 task_schema = TaskSchema()
 tasks_schema = TaskSchema(many=True)
+
+#webhook
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        print(request.json)
+        return 'success', 200
+    else:
+        abort(400)
+
 
 @app.route('/tasks', methods=['Post'])
 def create_task():
